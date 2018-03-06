@@ -1,0 +1,2 @@
+1,11,21,31,41,51 * * * *       (cd $HOME/.local/bin ; ./push_data.sh >> $HOME/dfclient/push.log 2>> $HOME/dfclient/push.err)
+31               * * * *       (cd $HOME/.local/bin ; ./rsync_dfclient_dir.sh >/dev/null 2>/dev/null)

@@ -1,0 +1,59 @@
+commit 8af7033165729bfcc58d74ff0fdd6387f66ac56d
+Author: Patrick McManus <mcmanus@ducksong.com>
+Date:   Sat Apr 18 17:21:53 2009 -0400
+
+    device create picked up a 5th argument in 2.6.27
+
+diff --git a/driver/boltek.c b/driver/boltek.c
+index 3615f25..2117a24 100644
+--- a/driver/boltek.c
++++ b/driver/boltek.c
+@@ -20,8 +20,9 @@
+ #include <linux/device.h>
+ #include <linux/poll.h>
+ #include <linux/cdev.h>
++#include <linux/version.h>
+ 
+-#define BOLTEK_VERSION		"v1:1.0.0"
++#define BOLTEK_VERSION		"v1:1.0.1"
+ static u16 boltek_abi_version  = 0x0001;
+ 
+ #define BOLTEK_DATA_NORTH_OFFSET      (detector.mem + 0x00) /* 16 bits read */
+@@ -245,6 +246,7 @@ static int __devinit boltek_probe(struct pci_dev *pdev,
+ 				  const struct pci_device_id *pci_id)
+ {
+ 	int rv = 0;
++        struct device *ud;
+ 
+ 	spin_lock(&boltek_lock);
+ 	rv = pci_enable_device(pdev);
+@@ -291,16 +293,27 @@ static int __devinit boltek_probe(struct pci_dev *pdev,
+ 		goto boltek_probe_done;
+ 	}
+ 
+-	if (IS_ERR(device_create(detector.class, &pdev->dev,
++	ud = device_create(detector.class, 
++                           &pdev->dev,
+ 				 MKDEV(detector.major, 0),
+-				 "lightning-%d", 0)))
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)
++                           NULL,
++#endif
++                           "lightning-%d", 
++                           0);
++
++	if (IS_ERR(ud))
++        {
+ 		dev_err(&pdev->dev,
+ 			"can't create sysfs entry for /dev/lightning-0\n");
++        }
+ 	else
++        {
+ 		printk(KERN_INFO
+ 		       "Boltek Lightning Detector started at"
+ 		       " /dev/lightning-0 major %d minor 0\n",
+ 		       detector.major);
++        }
+ 
+ 	detector.active = 1;
+ boltek_probe_done:

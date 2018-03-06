@@ -1,0 +1,11 @@
+- name: admin
+  password: iap_ldn_test
+  is_admin: true
+
+- name: ldf-interface
+  password: iap_ldn_test
+  roles:
+    - table: solutions
+      permission: SELECT
+    - table: devices
+      permission: SELECT

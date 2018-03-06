@@ -1,0 +1,5 @@
+[DEFAULT]
+name: boltek_flaches_raw_data
+host: ldfdb.lightninglab.ru
+user: root
+password: xxxxxx

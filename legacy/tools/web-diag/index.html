@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Грозопеленгационная сеть</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    
+    <link rel="stylesheet" href="/3rdparty/ol.css">
+    <link rel="stylesheet" href="/3rdparty/style.css">
+    <link rel="stylesheet" href="/3rdparty/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="/3rdparty/jquery.datetimepicker.css" type="text/css">
+    
+    <script type="text/javascript" src="/3rdparty/jquery.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+            var points = ['bezvodnoe', 'gorodetc', 'iapras', 'semenov', 'vasilsursk'];
+
+            points.forEach(function(item, i, points) {
+                console.log('/diag/lds/'+item+'/dfclient-stat-10s.txt');
+                console.log('/diag/lds/'+item+'/dfclient-stat-60s.txt');
+
+                $.get('/diag/lds/'+item+'/dfclient-stat-10s.txt', function(data) {$('#'+item+' div.report10s').html(data);});
+                $.get('/diag/lds/'+item+'/dfclient-stat-60s.txt', function(data) {$('#'+item+' div.report60s').html(data);});
+            });
+        });
+    </script>
+    <style>
+        .report10s, .report60s {
+            display: block;
+            unicode-bidi: embed;
+            font-family: monospace;
+            white-space: pre;
+            border: solid 1px black;
+            margin:5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="logo-image"></div>
+        <div id="header">Региональная грозопеленгационная система</div>
+    </header>
+    <div id=gorodetc>
+    <h2>Городец</h2>
+    10s:
+    <div class=report10s></div>
+    60s:
+    <div class=report60s></div>
+    </div>
+
+    <div id=semenov>
+    <h2>Семенов</h2>
+    10s:
+    <div class=report10s></div>
+    60s:
+    <div class=report60s></div>
+    </div>
+
+    <div id=iapras>
+    <h2>ИПФРАН</h2>
+    10s:
+    <div class=report10s></div>
+    60s:
+    <div class=report60s></div>
+    </div>
+
+    <div id=bezvodnoe>
+    <h2>Безводное</h2>
+    10s:
+    <div class=report10s></div>
+    60s:
+    <div class=report60s></div>
+    </div>
+
+    <div id=vasilsursk>
+    <h2>Васильсурск</h2>
+    10s:
+    <div class=report10s></div>
+    60s:
+    <div class=report60s></div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,13 @@
+[Unit]
+Description=Lightning detection network client
+After=mysql.service
+
+[Service]
+ExecStart=/home/boltek/.local/bin/dfclient
+#ExecStop=/usr/bin/killall -2 dfclient
+User=boltek
+SendSIGKILL=no
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

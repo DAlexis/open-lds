@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./mathtest --random-lon-left=40 --random-lon-right=90 --random-lat-bottom=50 --random-lat-top=90 --test-gen-random=4 --test-save=random.conf $*

@@ -1,0 +1,5 @@
+ldf:
+    host: localhost
+    user: root
+    pass: 123qwe
+    name: lightning_detection_system
