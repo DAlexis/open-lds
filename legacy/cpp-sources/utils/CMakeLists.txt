@@ -6,7 +6,7 @@ export_include_dirs(
     ${PROJECT_SOURCE_DIR}
 )
 
-add_subdirectory(log-config)
+add_subdirectory(boost-log-configurator)
 add_subdirectory(constants)
 add_subdirectory(math-utils)
 add_subdirectory(timestamp)
