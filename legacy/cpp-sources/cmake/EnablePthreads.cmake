@@ -1,0 +1,7 @@
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+find_package(Threads REQUIRED)
+if(CMAKE_USE_PTHREADS_INIT)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+else()
+    message( FATAL_ERROR "Sorry, we cannot work without POSIX threads" )
+endif()
