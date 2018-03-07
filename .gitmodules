@@ -1,0 +1,6 @@
+[submodule "legacy/cpp-sources/utils/light-serializer"]
+	path = legacy/cpp-sources/utils/light-serializer
+	url = https://github.com/DAlexis/light-serializer.git
+[submodule "legacy/cpp-sources/utils/boost-log-configurator"]
+	path = legacy/cpp-sources/utils/boost-log-configurator
+	url = https://github.com/DAlexis/boost-log-configurator.git
