@@ -3,7 +3,6 @@ doc
 bin
 __pycache__
 tools/dbmonitor/db.conf
-*.cmake
 *CMakeFiles*
 CMakeCache.txt
 Makefile
