@@ -1,4 +1,4 @@
 connection:
   hostname: diogen
-  username: ldn-interface
+  username: data-processor
   database_suffix: ""

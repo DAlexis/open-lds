@@ -1,11 +1,15 @@
 import ldfutils.pos_time
-import array
+import ldfutils.utils as ut
 
+import numpy as np
+import math
+import array
 import copy
 
 
 class LightningMark:
     def __init__(self, **kwargs):
+        self.intensity_info = None
         self.time = ldfutils.pos_time.PrecisionTime.from_dict(kwargs)
         # if 'precision_time' in kwargs:
         #     if not isinstance(kwargs['precision_time'], ldfutils.pos_time.PrecisionTime):
@@ -40,6 +44,9 @@ class LightningMark:
             self.id = 0
         self.time_since_group_begin = 0.0
 
+    def add_intensity_info(self, intensity_info):
+        self.intensity_info = intensity_info
+
     def __str__(self):
         return '[Lightning mark] id=' + str(self.id) + \
                ' pos=' + str(self.pos) + \
@@ -55,7 +62,7 @@ class TimeCluster:
         self.id = kwargs["id"]
         self.time = ldfutils.pos_time.PrecisionTime.from_dict(kwargs)
         self.strikes_count = kwargs["strikes_count"]
-        strikes_int = [int(x) for x in filter(None, kwargs["strikes"].replace(" ", "").split(','))]
+        strikes_int = ut.split_ids_from_str(kwargs["strikes"])
         self.strikes = list(filter(None, strikes_int))
         if self.strikes_count != len(self.strikes):
             raise ValueError("Cannot initialize TimeCluster when strikes_count = " + str(self.strikes_count) +
@@ -137,3 +144,65 @@ class FullStrikeInfo:
 
     def __repr__(self):
         return self.__str__()
+
+
+class IntensityInfo:
+    intensity_id_just_created = -1
+
+    def __init__(self, solution_id, intensities, min_dist, intensity_id=intensity_id_just_created):
+        self.intensity_id = intensity_id
+        self.solution_id = solution_id
+        self.intensities = list(intensities)
+        self.intensity = np.mean(self.intensities)
+        self.min_dist = min_dist
+        self.mean_square_normed = math.sqrt(np.square(self.intensities - self.intensity).mean()) / self.intensity
+
+    def __str__(self):
+        return '[IntensityInfo] solution_id=' + str(self.solution_id)
+
+    def intensities_str(self):
+        result = ""
+        for i in self.intensities:
+            result += str(i) + ", "
+        return result
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class RepetitionGroup:
+    group_id_just_created = -1
+
+    def __init__(self, group_id=group_id_just_created, solutions=None):
+        self.id = group_id
+        if solutions is not None:
+            self.solutions = solutions  # type: list[LightningMark]
+        else:
+            self.solutions = []  # type: list[LightningMark]
+
+    def add(self, solution):
+        self.solutions.append(solution)
+
+    def last(self):
+        return self.solutions[-1]
+
+    def sort(self):
+        self.solutions.sort(key=lambda x: x.time)
+
+    def solutions_string(self):
+        result = ""
+        for sol in self.solutions:
+            result += str(sol.id) + ", "
+        return result
+
+    def time(self):
+        return self.solutions[0].time
+
+    def __str__(self):
+        return "[RepetitionGroup] solutions: " + str(self.solutions)
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __len__(self):
+        return len(self.solutions)

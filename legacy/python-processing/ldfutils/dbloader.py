@@ -1,25 +1,7 @@
-from Tools.scripts.serve import app
-
 import ldfutils.connection
 import ldfutils.dbtypes as dbt
-
-
-class ConditionGenerator:
-    @staticmethod
-    def round_time_interval(time_from, time_to):
-        return '(`round_time` BETWEEN "{}" AND "{}")'.format(time_from, time_to)
-
-    @staticmethod
-    def not_on_the_farest():
-        return "status = 0"
-
-    @staticmethod
-    def in_square(lat1, lon1, lat2, lon2):
-        if lat2 < lat1:
-            lat2, lat1 = lat2, lat2
-        if lon2 < lon1:
-            lon2, lon1 = lon1, lon2
-        return "(lat>={} && lon>={} && lat<{} && lon<{})".format(lat1, lon1, lat2, lon2)
+import ldfutils.utils as ut
+from typing import Dict, Tuple, List
 
 
 def load_solutions(cursor, conditions="1"):
@@ -107,3 +89,65 @@ def load_solutions_details(cursor, solutions):
 def load_full_solutions(cursor, solution_conditions=""):
     solutions = load_solutions(cursor, solution_conditions)
     return load_solutions_details(cursor, solutions)
+
+
+def is_intensity_info_exists(cursor, solution_id):
+    query = 'SELECT id FROM intensity WHERE solutions_id = ' + str(solution_id)
+    cursor.execute(query)
+    return cursor.rowcount != 0
+
+
+def add_time_limits_to_option_parser(option_parser, default_from="2015-06-01 00:00:00", default_to="2015-08-01 00:00:00"):
+    option_parser.add_option("-b", "--begin", dest="begin_time", default=default_from,
+                               help="Start time for extracting", metavar="yyyy-mm-dd hh:mm:ss")
+
+    option_parser.add_option("-e", "--end", dest="end_time", default=default_to,
+                               help="End time for extracting", metavar="yyyy-mm-dd hh:mm:ss")
+    return option_parser
+
+
+def load_repetition_groups(cursor, conditions="0"):
+    def parse_row(row):
+        (group_id, solutions_str) = row
+        solutions = ut.split_ids_from_str(solutions_str)
+        group = dbt.RepetitionGroup(group_id)
+        for sol in solutions:
+            group.add(load_solutions(cursor, conditions="id = " + str(sol))[0])
+        return group
+
+    query = ('SELECT id, solutions '
+             'FROM rep_strokes WHERE ' + conditions)
+
+    cursor.execute(query)
+
+    # First reading all rows
+    all_rows = [row for row in cursor]
+
+    # Then parsing it and selecting solutions
+    groups = [parse_row(row) for row in all_rows]
+    return groups
+
+
+def load_intensity_info_for_repetition_groups(cursor, rep_groups: List[dbt.RepetitionGroup]):
+    for rg in rep_groups:
+        for sol in rg.solutions:
+            sol.add_intensity_info(load_intensity_info(cursor, sol.id))
+    return rep_groups
+
+
+def load_intensity_info(cursor, solution_id):
+    def parse_row(row):
+        (intensity_id, solutions_id, intensities, min_distance) = row
+        return dbt.IntensityInfo(solution_id=solution_id, intensities=ut.split_floats_from_str(intensities), min_dist=min_distance, intensity_id=intensity_id)
+
+    query = ('SELECT id, solutions_id, intensities, min_distance'
+             ' FROM intensity WHERE solutions_id=' + str(solution_id))
+
+    cursor.execute(query)
+
+    row = next(cursor, None)
+    if row is not None:
+        return parse_row(row)
+    else:
+        return None
+

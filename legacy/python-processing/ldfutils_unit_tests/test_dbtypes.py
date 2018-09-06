@@ -31,5 +31,18 @@ class TestTimeCluster(unittest.TestCase):
             strikes="12,23,45  , "
         )
 
+
+class TestIntensityInfo(unittest.TestCase):
+    def test_creation(self):
+        ii1 = ldfutils.dbtypes.IntensityInfo(solution_id=25, intensities=[3.0, 3.0, 3.0], min_dist=1000.0)
+        self.assertEqual(ii1.solution_id, 25)
+        self.assertEqual(ii1.intensity, 3.0)
+        self.assertEqual(ii1.mean_square_normed, 0.0)
+        self.assertEqual(ii1.min_dist, 1000.0)
+        self.assertEqual(ii1.intensities_str(), "3.0, 3.0, 3.0, ")
+
+        ii2 = ldfutils.dbtypes.IntensityInfo(solution_id=44, intensities=[1.0, 4.0], min_dist=1000.0)
+        self.assertAlmostEqual(0.59999999999999998, ii2.mean_square_normed, places=8)
+
 if __name__ == "__main__":
     unittest.main()

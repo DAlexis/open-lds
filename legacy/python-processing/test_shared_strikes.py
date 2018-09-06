@@ -3,6 +3,7 @@
 import ldfutils.connection
 import ldfutils.dbtypes as lm
 import ldfutils.dbloader
+import ldfutils.utils as ut
 import ldfutils.solutions_processing as sp
 import sys
 from optparse import OptionParser
@@ -34,7 +35,7 @@ try:
     print("Loading time clusters...")
     clusters = ldfutils.dbloader.load_time_clusters(
         cursor,
-        ldfutils.dbloader.ConditionGenerator.round_time_interval(cmd_line_options.begin_time, cmd_line_options.end_time)
+        ut.ConditionGenerator.round_time_interval(cmd_line_options.begin_time, cmd_line_options.end_time)
     )
 
     used_strikes = {}

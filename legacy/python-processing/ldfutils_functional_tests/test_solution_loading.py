@@ -1,4 +1,5 @@
 import ldfutils.connection
+import ldfutils.utils as ut
 #import matplotlib.pyplot as plt
 
 
@@ -13,7 +14,7 @@ def test_solutions_loading(username, password):
 
     lightnings = ldfutils.dbloader.load_solutions(
         cursor,
-        ldfutils.dbloader.ConditionGenerator.round_time_interval("2016-06-22 15:00:00", "2016-06-22 15:30:00")
+        ut.ConditionGenerator.round_time_interval("2016-06-22 15:00:00", "2016-06-22 15:30:00")
     )
 
     return len(lightnings) != 0
@@ -50,7 +51,7 @@ def test_full_data_loading(username, password):
 
     full_sols = ldfutils.dbloader.load_full_solutions(
         cursor,
-        ldfutils.dbloader.ConditionGenerator.round_time_interval("2016-06-22 15:00:00", "2016-06-22 15:30:00")
+        ut.ConditionGenerator.round_time_interval("2016-06-22 15:00:00", "2016-06-22 15:30:00")
     )
 
     return len(full_sols) != 0

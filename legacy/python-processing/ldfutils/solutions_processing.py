@@ -23,6 +23,19 @@ def solution_energy(sol: lm.FullStrikeInfo):
     return np.average(ens), ens, dists
 
 
+def generate_intensity(sol: lm.FullStrikeInfo):
+    ints = []
+    dists = []
+    for strike in sol.strikes:
+        dist = strike.position - sol.mark.pos
+        dists.append(dist)
+        en = strike_energy(strike)
+        src_en = source_energy(en, dist)
+        ints.append(src_en)
+    return lm.IntensityInfo(solution_id=sol.id, intensities=ints, min_dist=np.min(dists))
+
+
+@DeprecationWarning
 def get_repeated_strikes_intervals(lightnings: lm.LightningMark, repeated_interval_max, repeated_dist_max):
     """
     Get intervals between strikes, devides by their repetitions count. Repetition criteria consists of
@@ -55,6 +68,28 @@ def get_repeated_strikes_intervals(lightnings: lm.LightningMark, repeated_interv
         prev = current
 
     return intervals, lightnings_vs_repetition
+
+
+def extract_repetition_groups(lightnings, repeated_interval_max, repeated_dist_max):
+    lightnings.sort(key=lambda x: x.time)
+    groups = []     # type: list[lm.RepetitionGroup]
+    # TODO: make this working properly for len == 1
+    if len(lightnings) < 2:
+        return groups
+
+    groups.append(lm.RepetitionGroup(solutions=[lightnings[0]]))
+
+    for current in lightnings[1:]:
+        dt = current.time - groups[-1].last().time
+        dist = current.pos - groups[-1].last().pos
+        if dt < repeated_interval_max and dist < repeated_dist_max:
+            # current is a repetition of prev
+            groups[-1].add(current)
+        else:
+            # current is single
+            groups.append(lm.RepetitionGroup(solutions=[current]))
+
+    return groups
 
 
 def repetition_conditional_probability(intervals, max_repetitions_count=0):

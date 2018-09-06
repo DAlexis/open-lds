@@ -89,6 +89,12 @@ class PrecisionTime:
             self.round = datetime.datetime.strptime(round_datetime, round_format)
         self.fractional = float(fractional_time)
 
+    def round_time(self):
+        return str(self.round)
+
+    def fractional_time(self):
+        return self.fractional
+
     def __add__(self, seconds):
         result = copy.copy(self)
         result.fractional += seconds

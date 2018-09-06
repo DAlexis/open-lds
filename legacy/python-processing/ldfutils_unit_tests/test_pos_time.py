@@ -7,7 +7,7 @@ import datetime
 
 
 class TestPrecisionTime(unittest.TestCase):
-    def test_creation_datetime(self):
+    def test_creation_datetime1(self):
         r = "2015-06-26 03:40:00"
         f = ".123"
         test_time = ldfutils.pos_time.PrecisionTime(
@@ -15,6 +15,19 @@ class TestPrecisionTime(unittest.TestCase):
             f
         )
         self.assertEqual(str(test_time), r+f)
+        self.assertEqual(test_time.round_time(), r)
+        self.assertAlmostEqual(test_time.fractional_time(), float("0" + f), 8)
+
+    def test_creation_datetime2(self):
+        r = "2015-06-26 03:40:00"
+        f = ".0"
+        test_time = ldfutils.pos_time.PrecisionTime(
+            datetime.datetime.strptime(r, ldfutils.pos_time.PrecisionTime.default_round_time_format),
+            f
+        )
+        self.assertEqual(str(test_time), r+f)
+        self.assertEqual(test_time.round_time(), r)
+        self.assertAlmostEqual(test_time.fractional_time(), float("0" + f), 8)
 
     def test_creation_from_string(self):
         r = "2015-06-26 03:40:00"

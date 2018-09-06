@@ -14,7 +14,7 @@ parser.add_argument('-u', '--user',
                     help='Directory of signal files')
 
 parser.add_argument('-p', '--password',
-                    default="31d8rDyk",
+                    default="xxxxxxxxx",
                     help='Directory of signal files')
 
 args = parser.parse_args()
