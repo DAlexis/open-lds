@@ -25,18 +25,20 @@
 #include <vector>
 #include <mutex>
 
+// Another workaround for this ancient my_global.h
+#define __builtin_expect(x, y)    (x)
 #include <my_global.h>
 #include <mysql.h>
+#undef __builtin_expect
 
-#ifndef NO_NEED_TO_UNDEF_MYSQL_MACROSES
-    /// Fix of http://bugs.mysql.com/bug.php?id=28184
-    /// Mysql defines its own macroses min and max that conflicts with STL algorithm
-    /// Fix of http://bugs.mysql.com/bug.php?id=28184
-    #undef min
-    #undef max
-    #undef test
-    #undef set_bits
-#endif //NO_NEED_TO_UNDEF_MYSQL_MACROSES
+// Fix of http://bugs.mysql.com/bug.php?id=28184
+// Mysql defines its own macroses min and max that conflicts with STL algorithm
+// Fix of http://bugs.mysql.com/bug.php?id=28184
+#undef likely
+#undef min
+#undef max
+#undef test
+#undef set_bits
 
 #include <sstream>
 #include <limits>

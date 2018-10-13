@@ -4,3 +4,6 @@
 [submodule "legacy/cpp-sources/utils/boost-log-configurator"]
 	path = legacy/cpp-sources/utils/boost-log-configurator
 	url = https://github.com/DAlexis/boost-log-configurator.git
+[submodule "legacy/cpp-sources/3rdparty/googletest"]
+	path = legacy/cpp-sources/3rdparty/googletest
+	url = https://github.com/google/googletest.git

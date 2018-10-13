@@ -92,7 +92,7 @@ size_t StrikesGroup::readBoltekStrikesWithIdsInRange(MySQLConnectionManager& mys
             strike.read(TT_BOLTEK_RAW, mysql);
             strikes.push_back(strike);
             count++;
-        } catch(StrikeData::Exception) {}
+        } catch(StrikeData::Exception&) {}
         
     } while (mysql.nextRow());
     return count;
@@ -418,7 +418,7 @@ unsigned int StrikesGroup::readTimeCluster(MySQLConnectionManager& mysql)
             count++;
         }
     }
-    catch(StrikeData::Exception)
+    catch(StrikeData::Exception&)
     {
         throw ExCannotAddStrikeFromDb();
     }

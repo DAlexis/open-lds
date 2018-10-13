@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 2.8)
 project(mysql-utils-unit-tests)
 
 find_package (MySQL REQUIRED)
-find_package (GTest REQUIRED)
 
 include_directories(
     ${mysql-wrapper_INCLUDE_DIRS}

@@ -287,7 +287,7 @@ bool StrikesProcessor::clusterizingIteration()
     
     clusteringDestinationDb.closeConnection();
     
-    lastClusterizedStrikeTime = group.getLatestStrikeTime() + boost::posix_time::hours(timeZoneShift);
+    lastClusterizedStrikeTime = group.getLatestStrikeTime() + boost::posix_time::hours(int(timeZoneShift));
     BOOST_LOG_SEV(globalLogger, debug) << "Lifecycle done, readed " << readed << " records";
     saveState();
     return true;
@@ -499,10 +499,10 @@ std::string StrikesProcessor::simpleGMTQuery(const Time& from, const Time& to)
 {
     std::ostringstream query;
     query << "(`when` > '"
-          << (from - boost::posix_time::hours(timeZoneShift)).getRoundPart()
+          << (from - boost::posix_time::hours(int(timeZoneShift))).getRoundPart()
           << "') && "
           << "(`when` <= '"
-          << (to - boost::posix_time::hours(timeZoneShift)).getRoundPart()
+          << (to - boost::posix_time::hours(int(timeZoneShift))).getRoundPart()
           << "')";
     return query.str();
 }

@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 
 project(positioning-utils-unit-tests)
 
-find_package (GTest REQUIRED)
-
 include_directories (
     ${positioning-utils_INCLUDE_DIRS}
     ${GTEST_INCLUDE_DIR}

@@ -15,17 +15,6 @@ add_definitions( -DGIT_COMMIT_TAG=${git_commit} )
 
 add_definitions( -DBOOST_LOG_DYN_LINK )
 
-# This is to run all tests using 'make run-unit-tests' command.
-# Another way is simply run 'ctest -VV', but output is not colorized :(
-add_custom_target(run-unit-tests)
-macro(run_test test_target)
-  add_custom_target(${test_target}_runtest
-      COMMAND ${test_target} #cmake 2.6 required
-      DEPENDS ${test_target}
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
-  add_dependencies(run-unit-tests ${test_target}_runtest)
-endmacro()
-
 ## This macro creates variable ${PROJECT_NAME}_INCLUDE_DIRS with list of 
 # include directories exported by project
 macro(export_include_dirs)
@@ -42,8 +31,7 @@ macro(export_libs)
         CACHE INTERNAL "${PROJECT_NAME}: used and exported libs" FORCE)
 endmacro()
 
-# To enable ctest usage
-enable_testing()
+include(detect-gtest.cmake)
 
 add_subdirectory(libboltek)
 add_subdirectory(utils)
@@ -54,4 +42,8 @@ add_subdirectory(strikesprocd)
 add_subdirectory(strikesstatd)
 add_subdirectory(strikesproc)
 
-add_subdirectory(unit-tests)
+if(GTEST_FOUND)
+    # To enable ctest usage
+    enable_testing()
+    add_subdirectory(unit-tests)
+endif()

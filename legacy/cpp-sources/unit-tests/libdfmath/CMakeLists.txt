@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 
 project(libdfmath-unit-tests)
 
-find_package (GTest REQUIRED)
 find_package (MySQL REQUIRED)
 find_package (Boost COMPONENTS date_time REQUIRED)
 
