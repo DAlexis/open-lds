@@ -9,14 +9,6 @@
 
 std::mutex MySQLConnectionManager::initMutex;
 
-void finish_with_error(MYSQL *con)
-{
-    fprintf(stderr, "%s\n", mysql_error(con));
-    mysql_close(con);
-    exit(1);
-}
-
-
 ///////////////////////
 // MySQLInsertGenerator
 MySQLInsertGenerator::MySQLInsertGenerator(std::string tableName) :
@@ -107,7 +99,7 @@ void MySQLConnectionManager::openConnection()
     if (mysql_real_connect(connection, hostName.c_str(), userName.c_str(), password.c_str(),
       name.c_str(), 0, nullptr, 0) == nullptr)
     {
-        throw ATT_SCOPES_STACK(ExCannotOpenConnection("mysql_real_connect returned NULL"));
+        throw ATT_SCOPES_STACK(ExCannotOpenConnection(std::string("mysql_real_connect returned NULL: ") + mysql_error(connection)));
     }
 }
 

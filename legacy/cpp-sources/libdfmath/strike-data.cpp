@@ -84,9 +84,10 @@ void StrikeData::readBoltekData(MySQLConnectionManager& mysql)
         // Reading buffers
         unsigned int bufferSizeInBytes = BOLTEK_BUFFERSIZE*sizeof(int);
         
-        if (mysql.getLength(Boltek::RD_E_FIELD) != bufferSizeInBytes
+        if ( (mysql.getLength(Boltek::RD_E_FIELD) != bufferSizeInBytes
             || mysql.getLength(Boltek::RD_MN_FIELD) != bufferSizeInBytes
             || mysql.getLength(Boltek::RD_ME_FIELD) != bufferSizeInBytes)
+             && mysql.getLength(Boltek::RD_E_FIELD) != 0)
             throw ExInvalidDataFormat();
         
         bufferSize = BOLTEK_BUFFERSIZE;

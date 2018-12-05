@@ -157,7 +157,6 @@ size_t StrikesGroup::smartReadTailWithoutSort(TableType tableType, MySQLConnecti
     if (strikes.empty())
         return 0;
     do {
-        std::cout << "Reading tail" << std::endl;
         std::ostringstream baseQuery;
         if (readFromBegin)
         {

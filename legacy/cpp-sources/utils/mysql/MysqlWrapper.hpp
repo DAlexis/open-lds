@@ -44,8 +44,6 @@
 #include <limits>
 #include <iomanip>
 
-extern void finish_with_error(MYSQL *con);
-
 class MySQLInsertGenerator
 {
 public:
@@ -219,8 +217,10 @@ public:
         chunk = new char[2*size+1];
         //mysql_real_escape_string(Mysql::getConnection(), chunk,
         //                         reinterpret_cast<const char*>(data), size);
-        mysql_escape_string(chunk,
-                                 reinterpret_cast<const char*>(data), size);
+        if (size == 0)
+            *chunk = '\0';
+        else
+            mysql_escape_string(chunk, reinterpret_cast<const char*>(data), size);
     }
 
     virtual ~BlobData()
