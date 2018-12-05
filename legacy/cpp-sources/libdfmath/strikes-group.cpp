@@ -191,18 +191,9 @@ size_t StrikesGroup::smartReadTailWithoutSort(TableType tableType, MySQLConnecti
 
 bool StrikesGroup::testIfInOneCluster(size_t first, size_t second)
 {
-    if (
-         (
-            fabs(
-              strikes[second].time
-              - strikes[first].time
-              + getTimeShift(
-                  strikes[first],
-                  strikes[second],
-                  Configuration::Instance().precision.timeClusterDetectionAllowedTimeError * 0.5
-                )
-            )
-            - Configuration::Instance().precision.timeClusterDetectionAllowedTimeError
+    if ( (fabs(strikes[second].time - strikes[first].time
+              + getTimeShift(strikes[first], strikes[second], Configuration::Instance().precision.timeClusterDetectionAllowedTimeError * 0.5)
+              ) - Configuration::Instance().precision.timeClusterDetectionAllowedTimeError
          ) * Global::LightSpeed
          < (strikes[first].position - strikes[second].position)
        )

@@ -151,3 +151,17 @@ def load_intensity_info(cursor, solution_id):
     else:
         return None
 
+
+def insert_strike_raw(cursor, strike: dbt.Strike):
+    ocs_freq = 50000000
+    query = (
+        "INSERT INTO strikes (device_id, experiment_id, `when`, osc_freq, count_osc, lon, lat, lon_ew, lat_ns, E_field, MN_field, MW_field)"
+        "VALUES (" + str(strike.device_id) + ", " + str(strike.experiment_id) + ", \"" + str(strike.time.round_time()) + "\", " +
+        str(ocs_freq) + ", " + str(int(strike.time.fractional_time() * ocs_freq)) + ", " + str(strike.position.lon) + ", " +
+        str(strike.position.lat) + ", '" + strike.position.EW() + "', '" + strike.position.NS() + "', \"\", \"\", \"\" );"
+
+    )
+    cursor.execute(query)
+
+    print(query)
+

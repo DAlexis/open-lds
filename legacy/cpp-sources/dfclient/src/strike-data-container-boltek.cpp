@@ -64,6 +64,17 @@ void StrikeDataContainerBoltek::serDeser(lightser::ByteStreamWrapper& bsw)
 	bsw & m_experimentId;
 }
 
+std::string StrikeDataContainerBoltek::str()
+{
+    ostringstream oss;
+    oss << "device_id: " << m_deviceId;
+    oss << "; experiment_id: " << m_experimentId;
+    oss << "; when: " << formatStrikeTime(m_pboltekData.lts2_data);
+    oss << "; lat: " << m_pboltekData.lts2_data.latitude_ns << m_pboltekData.lts2_data.latitude_mas;
+    oss << "; lon: " << m_pboltekData.lts2_data.longitude_ew << m_pboltekData.lts2_data.longitude_mas;
+    return oss.str();
+}
+
 std::string StrikeDataContainerBoltek::formatStrikeTime(const StormProcess_tTIMESTAMPINFO& timestampInfo)
 {
     ostringstream oss;

@@ -8,8 +8,8 @@
 #include "output-provider-mysql.hpp"
 #include "configurator.hpp"
 
-CONCRETE_FACTORY_REGISTRATION(MySQLOutputProviderFactory, OutputProviderCreator, "mysql");
-CONCRETE_FACTORY_CREATE_METHOD(MySQLOutputProviderFactory, MySQLOutputProvider, IOutputProvider);
+CONCRETE_FACTORY_REGISTRATION(MySQLOutputProviderFactory, OutputProviderCreator, "mysql")
+CONCRETE_FACTORY_CREATE_METHOD(MySQLOutputProviderFactory, MySQLOutputProvider, IOutputProvider)
 
 
 MySQLOutputProvider::MySQLOutputProvider()

@@ -2,10 +2,28 @@ cmake_minimum_required(VERSION 2.8)
 
 project(dfclient)
 
-find_package (Boost COMPONENTS system filesystem date_time REQUIRED)
+find_package (Boost COMPONENTS system filesystem date_time program_options REQUIRED)
 find_package (Threads)
 
-set(EXE_SOURCES 
+set(HPP_SOURCES 
+    include/output-provider-mysql.hpp
+    include/boltek-hw.hpp
+    include/dfclient-system.hpp
+    include/strike-data-container-boltek.hpp
+    include/output-provider-interface.hpp
+    include/boltek-hw-simulator.hpp
+    include/hardware-interface.hpp
+    include/strike-data-container-interface.hpp
+    include/data-collector.hpp
+    include/output-manager.hpp
+    include/receiver-controller.hpp
+    include/utils.hpp
+    include/health-monitor.hpp
+    include/output-provider-serializer.hpp
+    include/importer.hpp
+)
+
+set(CPP_SOURCES 
     src/main.cpp
     src/receiver-controller.cpp
     src/dfclient-system.cpp
@@ -19,6 +37,7 @@ set(EXE_SOURCES
     src/boltek-hw-simulator.cpp
     src/boltek-hw.cpp
     src/utils.cpp
+	src/importer.cpp
 )
 
 include_directories(
@@ -37,7 +56,7 @@ include_directories(
     ${light-serializer_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME} ${EXE_SOURCES})
+add_executable(${PROJECT_NAME} ${CPP_SOURCES} ${HPP_SOURCES})
 
 target_link_libraries(${PROJECT_NAME}
     ${timestamp-utils_LIBRARY}
@@ -49,8 +68,7 @@ target_link_libraries(${PROJECT_NAME}
     ${positioning-utils_LIBRARY}
     ${light-serializer_LIBRARY}
     
-    ${Boost_FILESYSTEM_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
+	${Boost_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
 )
 

@@ -97,9 +97,7 @@ void StrikesGroupVariationalSolver::solveLightningPositioningProblem()
     if (m_group->getTimeClusterStatus() != StrikesGroup::CS_ONE_CLUSTER)
         throw std::logic_error(EX_PREFIX + "Can solve only one-cluster group");
     
-    
-    lightnings.clear();
-    
+    lightnings.clear();    
     
     Function2D detFunction = std::bind(
         static_cast<double (StrikesGroupVariationalSolver::*)(double, double) const>(
@@ -109,17 +107,6 @@ void StrikesGroupVariationalSolver::solveLightningPositioningProblem()
         std::placeholders::_1,
         std::placeholders::_2
     );
-    
-    /// Counting center mass for DFs
-    /// @todo Remove this code and rewrite: center of mass is incorrect, we know
-    double latCenter = 0, lonCenter = 0;
-    for (auto it = m_group->begin(); it != m_group->end(); it++)
-    {
-        latCenter += it->position.getLatitude();
-        lonCenter += it->position.getLongitude();
-    }
-    latCenter /= m_group->size();
-    lonCenter /= m_group->size();
     
     std::unique_ptr<IClusterizer<Position>> pClusterizer(ClusterizatorsBuilder<Position>().createClusterizer("compact", calculateCenterOfMass));
     //ClasterizationProblemSolver<Position> clusterisator;
@@ -155,7 +142,7 @@ void StrikesGroupVariationalSolver::solveLightningPositioningProblem()
     
     std::vector<std::thread> workers;
     double currentIndex = 0;
-    double indexIncrement = ((double) initialPoints.size()) / ((double) threadsCount );
+    double indexIncrement = double(initialPoints.size()) / double(threadsCount);
     for (unsigned int t=0; t<threadsCount; t++)
     {
         unsigned int beginIndex = round(currentIndex);

@@ -15,8 +15,8 @@
 
 const std::string SerializerOutputProvider::m_name = "serializer";
 
-CONCRETE_FACTORY_REGISTRATION(SerializerOutputProviderFactory, OutputProviderCreator, SerializerOutputProvider::m_name);
-CONCRETE_FACTORY_CREATE_METHOD(SerializerOutputProviderFactory, SerializerOutputProvider, IOutputProvider);
+CONCRETE_FACTORY_REGISTRATION(SerializerOutputProviderFactory, OutputProviderCreator, SerializerOutputProvider::m_name)
+CONCRETE_FACTORY_CREATE_METHOD(SerializerOutputProviderFactory, SerializerOutputProvider, IOutputProvider)
 
 
 SerializerOutputProvider::SerializerOutputProvider()

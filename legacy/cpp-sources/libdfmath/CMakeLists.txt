@@ -13,6 +13,16 @@ set(LIB_SOURCE
     lightning-positioning-result.cpp
     corellation.cpp
     detection-testing.cpp
+
+	corellation.hpp
+	detection-testing.hpp
+	dfmath.hpp
+	lightning-positioning-result.hpp
+	strike-data.hpp
+	strike-modifiers.hpp
+	strikes-group.hpp
+	strikes-group-solvers.hpp
+	strikes-group-solver-variational.hpp
 )
 
 set(${PROJECT_NAME}_USED_INCDIRS

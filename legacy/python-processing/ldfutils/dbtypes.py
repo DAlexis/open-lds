@@ -7,6 +7,13 @@ import array
 import copy
 
 
+def to_list_of_ints(something):
+    if all(isinstance(x, int) for x in something):
+        return something
+    # In default case this is byte
+    return list(array.array('d', something))
+
+
 class LightningMark:
     def __init__(self, **kwargs):
         self.intensity_info = None
@@ -105,9 +112,9 @@ class Strike:
             self.experiment_id = 0
         self.time = ldfutils.pos_time.PrecisionTime.from_dict(kwargs)
         self.position = ldfutils.pos_time.Position.from_dict(kwargs)
-        self.e_field = list(array.array('d', kwargs["E_field"]))
-        self.mn_field = list(array.array('d', kwargs["MN_field"]))
-        self.mw_field = list(array.array('d', kwargs["MW_field"]))
+        self.e_field = to_list_of_ints(kwargs["E_field"])
+        self.mn_field = to_list_of_ints(kwargs["MN_field"])
+        self.mw_field = to_list_of_ints(kwargs["MW_field"])
 
     def __str__(self):
         return '[Strike] id=' + str(self.id) + \

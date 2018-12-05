@@ -27,6 +27,7 @@ public:
     std::string getMySQLQuery() const override;
     void setDevExpId(int deviceId, int experimentId) override;
     void serDeser(lightser::ByteStreamWrapper& bsw) override;
+    std::string str();
 
     static std::string formatStrikeTime(const StormProcess_tTIMESTAMPINFO& timestampInfo);
     static std::string getHumanReadableGPS(const StormProcess_tBOARDDATA& unpacked_info);

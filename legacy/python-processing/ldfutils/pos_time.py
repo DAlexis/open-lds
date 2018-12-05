@@ -153,6 +153,18 @@ class Position:
     def __repr__(self):
         return self.__str__()
 
+    def NS(self):
+        if self.lat >= 0:
+            return 'N'
+        else:
+            return 'S'
+
+    def EW(self):
+        if self.lat >= 0:
+            return 'E'
+        else:
+            return 'W'
+
 
 def make_datetime(string_round, string_fractional):
     parts = re.split('-|:| ', string_round)
