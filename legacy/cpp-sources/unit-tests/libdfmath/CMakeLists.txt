@@ -12,6 +12,7 @@ include_directories (
 
 set(EXE_SOURCES
     positioning-test.cpp
+    time-shift-test.cpp
 )
 
 add_executable(${PROJECT_NAME} ${EXE_SOURCES})

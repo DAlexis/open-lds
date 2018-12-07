@@ -83,11 +83,24 @@ void StrikeData::readBoltekData(MySQLConnectionManager& mysql)
         
         // Reading buffers
         unsigned int bufferSizeInBytes = BOLTEK_BUFFERSIZE*sizeof(int);
-        
-        if ( (mysql.getLength(Boltek::RD_E_FIELD) != bufferSizeInBytes
+        averageBField = 0;
+
+        if (mysql.getLength(Boltek::RD_E_FIELD) == 0)
+        {
+            bufferSize = 0;
+            averageBField = 0;
+            bufferDuration = 0;
+            bufferBeginShift = 0;
+            BNField.clear();
+            BEField.clear();
+            EField.clear();
+            return;
+        }
+        if (
+            mysql.getLength(Boltek::RD_E_FIELD) != bufferSizeInBytes
             || mysql.getLength(Boltek::RD_MN_FIELD) != bufferSizeInBytes
-            || mysql.getLength(Boltek::RD_ME_FIELD) != bufferSizeInBytes)
-             && mysql.getLength(Boltek::RD_E_FIELD) != 0)
+            || mysql.getLength(Boltek::RD_ME_FIELD) != bufferSizeInBytes
+         )
             throw ExInvalidDataFormat();
         
         bufferSize = BOLTEK_BUFFERSIZE;
@@ -124,6 +137,7 @@ void StrikeData::readBoltekData(MySQLConnectionManager& mysql)
             averageBField += BField[i];
         }
         averageBField /= bufferSize;
+
         delete[] rawBNField;
         delete[] rawBEField;
         delete[] rawEField;

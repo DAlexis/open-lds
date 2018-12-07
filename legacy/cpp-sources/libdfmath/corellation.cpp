@@ -40,6 +40,9 @@ Corellation::Corellation(const StrikeData& original,
 
 double getTimeShift(const StrikeData& first, const StrikeData& second, double precision)
 {
+    if (first.getBufferLength() == 0 || second.getBufferLength() == 0)
+        return 0.0;
+
     const double maxShift = first.getBufferEndTimeShift() - second.getBufferBeginTimeShift();
     const double minShift = first.getBufferBeginTimeShift() - second.getBufferEndTimeShift();
     const double dt = std::max(
