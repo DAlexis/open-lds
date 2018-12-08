@@ -350,17 +350,17 @@ double StrikesGroupVariationalSolver::calculateDirectionFindingDetFunc(const Pos
 
 double StrikesGroupVariationalSolver::calculateFiniteRadiusTerms(const Position& location) const
 {
-    double sum = 0;
+    double res = 1.0;
     for (auto it = m_group->begin(); it != m_group->end(); it++)
     {
-        sum += it->calculateFiniteRadiusTerm(location);
+        res = std::min(res, it->calculateFiniteRadiusTerm(location));
     }
-    return sum;
+    return res;
 }
 
 bool StrikesGroupVariationalSolver::isOnADetectionBorder(const Position& location) const
 {
-    return (calculateFiniteRadiusTerms(location) != 0);
+    return (calculateFiniteRadiusTerms(location) < 1e-2);
 }
 
 double StrikesGroupVariationalSolver::calculateDetectionFunction(const Position& location) const
