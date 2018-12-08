@@ -20,15 +20,15 @@ struct Direction
 {
     /** @brief Means azimuth like on compass (counted from Oy with positive direction CV), BUT interval is [-pi/2; pi/2]
      */
-    double azimuth;
+    double azimuth = 0.0;
     /** @brief Result of linear regression: 
      * cos(angle)x+sin(angle)y+d=0
      * angle in [-pi/2;pi/2] counted from Ox axis eith positive direction CCV
      */
-    double angle;
+    double angle = 0.0;
     /** @brief Some kind of relative error factor. More value of errorRate -- more error
      */
-    double errorRate;
+    double errorRate = 0.0;
 };
 
 class StrikeData;

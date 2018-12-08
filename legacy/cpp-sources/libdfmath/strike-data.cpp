@@ -558,7 +558,16 @@ void StrikeData::findDirection()
 {
     if (directionCounted)
         return;
-    
+
+    if (bufferSize == 0)
+    {
+        direction.angle = 0.0;
+        direction.azimuth = 0.0;
+        direction.errorRate = 0.0;
+        directionCounted = true;
+        return;
+    }
+
     LinearRegression2DFinder finder;
     finder.setArrays(bufferSize, BEField.data(), BNField.data());
     direction.angle = finder.getAngle();
