@@ -74,17 +74,26 @@ void StrikeData::readBoltekData(MySQLConnectionManager& mysql)
             fractionalSecs = std::stod(mysql.getData(Boltek::RD_COUNT_OSC)) / 5.0e7;
         
         time.setTime(mysql.getData(Boltek::RD_WHEN), fractionalSecs);
-        
-        // Reading coordinates
-        position.setFromBoltekData(std::stod(mysql.getData(Boltek::RD_LAT)),
-                              std::stod(mysql.getData(Boltek::RD_LON)),
-                              mysql.getData(Boltek::RD_LAT_NS)[0],
-                              mysql.getData(Boltek::RD_LON_EW)[0]);
+
+        // Lets detect if coordinates a smoker man integer, or healthy guy float
+        const char* latStr = mysql.getData(Boltek::RD_LAT);
+        const char* lonStr = mysql.getData(Boltek::RD_LON);
+        size_t pos = std::string(latStr).find(".");
+        if (pos == std::string::npos)
+        {
+            // We have boltek integer format
+            // Reading coordinates
+            position.setFromBoltekData(std::stod(latStr),
+                                  std::stod(lonStr),
+                                  mysql.getData(Boltek::RD_LAT_NS)[0],
+                                  mysql.getData(Boltek::RD_LON_EW)[0]);
+
+        } else {
+            // We have float values
+            position = Position(std::stod(latStr), std::stod(lonStr));
+        }
         
         // Reading buffers
-        unsigned int bufferSizeInBytes = BOLTEK_BUFFERSIZE*sizeof(int);
-        averageBField = 0;
-
         if (mysql.getLength(Boltek::RD_E_FIELD) == 0)
         {
             bufferSize = 0;
@@ -96,6 +105,8 @@ void StrikeData::readBoltekData(MySQLConnectionManager& mysql)
             EField.clear();
             return;
         }
+
+        unsigned int bufferSizeInBytes = BOLTEK_BUFFERSIZE*sizeof(int);
         if (
             mysql.getLength(Boltek::RD_E_FIELD) != bufferSizeInBytes
             || mysql.getLength(Boltek::RD_MN_FIELD) != bufferSizeInBytes
