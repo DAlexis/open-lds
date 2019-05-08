@@ -32,7 +32,7 @@ def add_connection_settings_to_option_parser(option_parser):
     return option_parser
 
 
-def setup_connection_settings(settings, filename, password, db='test'):
+def setup_connection_settings(settings, filename, password=None, db='test'):
     with open(filename, 'r') as f:
         conn_config = yaml.load(f.read())
 
@@ -42,7 +42,8 @@ def setup_connection_settings(settings, filename, password, db='test'):
     if 'hostname' not in conn_config['connection']:
         conn_config['connection']['hostname'] = 'localhost'
     
-    conn_config['connection']['password'] = password
+    if password is not None:
+        conn_config['connection']['password'] = password
     
     if db == 'test':
         conn_config['connection']['database'] = database_name_test

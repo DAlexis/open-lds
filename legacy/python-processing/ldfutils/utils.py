@@ -3,8 +3,8 @@ import ldfutils.pos_time as pt
 
 class ConditionGenerator:
     @staticmethod
-    def round_time_interval(time_from, time_to):
-        return '(`round_time` BETWEEN "{}" AND "{}")'.format(time_from, time_to)
+    def round_time_interval(time_from, time_to, key="round_time"):
+        return '(`{}` BETWEEN "{}" AND "{}")'.format(key, time_from, time_to)
 
     @staticmethod
     def not_on_the_farest():
