@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(df-math)
 find_package (Threads)
@@ -14,15 +14,15 @@ set(LIB_SOURCE
     corellation.cpp
     detection-testing.cpp
 
-	corellation.hpp
-	detection-testing.hpp
-	dfmath.hpp
-	lightning-positioning-result.hpp
-	strike-data.hpp
-	strike-modifiers.hpp
-	strikes-group.hpp
-	strikes-group-solvers.hpp
-	strikes-group-solver-variational.hpp
+    corellation.hpp
+    detection-testing.hpp
+    dfmath.hpp
+    lightning-positioning-result.hpp
+    strike-data.hpp
+    strike-modifiers.hpp
+    strikes-group.hpp
+    strikes-group-solvers.hpp
+    strikes-group-solver-variational.hpp
 )
 
 set(${PROJECT_NAME}_USED_INCDIRS
@@ -36,27 +36,14 @@ set(${PROJECT_NAME}_USED_INCDIRS
     ${log-config_INCLUDE_DIRS}
 )
 
-include_directories(${${PROJECT_NAME}_USED_INCDIRS})
-
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCE})
 
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_rvalue_references)
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_lambdas)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR} ${boltek_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PUBLIC timestamp-utils mysql-wrapper positioning-utils math-utils constants blconfig ${CMAKE_THREAD_LIBS_INIT})
 
-export_include_dirs(
-    ${PROJECT_SOURCE_DIR}
-    ${${PROJECT_NAME}_USED_INCDIRS}
-)
-
-export_libs(
-	-Wl,--whole-archive
-	${PROJECT_NAME}
-	-Wl,--no-whole-archive
-	${timestamp-utils_LIBRARY}
-    ${mysql-wrapper_LIBRARY}
-    ${positioning-utils_LIBRARY}    
-    ${math-utils_LIBRARY}
-    ${constants_LIBRARY}
-    ${blconfig_LIBRARY}
-    ${CMAKE_THREAD_LIBS_INIT}
-)
+#export_libs(
+#    -Wl,--whole-archive
+#    ${PROJECT_NAME}
+#    -Wl,--no-whole-archive
+    

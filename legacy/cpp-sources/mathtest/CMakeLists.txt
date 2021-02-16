@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(mathtest)
 
@@ -8,17 +8,15 @@ find_package (Boost COMPONENTS date_time program_options REQUIRED)
 
 set(EXE_SOURCES mathtest.cpp)
 
-include_directories(
-    ${df-math_INCLUDE_DIRS}
-)
 
 add_executable(${PROJECT_NAME} ${EXE_SOURCES})
 
-target_link_libraries (${PROJECT_NAME}
-    ${df-math_LIBRARY}
-    ${MYSQL_LIBRARY}
-    ${Boost_LIBRARIES}
-    ${blconfig_LIBRARY}
+target_link_libraries (${PROJECT_NAME} PUBLIC
+    -Wl,--whole-archive
+    df-math
+    -Wl,--no-whole-archive
+    blconfig
+    Boost::date_time Boost::program_options
 )
 
 configure_file(scripts/clasterisation.sh scripts/clasterisation.sh COPYONLY)

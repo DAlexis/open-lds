@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(strikes-statistics-collector)
 
@@ -11,26 +11,20 @@ set(EXE_SOURCES strikesstatd.cpp
                 configurator.cpp
                 stats-calculator.cpp)
 
-set(Boost_USE_STATIC_LIBS        OFF)
-set(Boost_USE_MULTITHREADED      ON)
-set(Boost_USE_STATIC_RUNTIME     OFF)
-set(Boost_ALL_DYN_LINK           ON)
+#set(Boost_USE_STATIC_LIBS        OFF)
+#set(Boost_USE_MULTITHREADED      ON)
+#set(Boost_USE_STATIC_RUNTIME     OFF)
+#set(Boost_ALL_DYN_LINK           ON)
 
-add_definitions( -DBOOST_LOG_DYN_LINK )
-
-include_directories(
-    ${df-math_INCLUDE_DIRS}
-    ${log-config_INCLUDE_DIRS}
-    ${Boost_INCLUDE_DIRS}
-)
+#add_definitions( -DBOOST_LOG_DYN_LINK )
 
 add_executable(${PROJECT_NAME} ${EXE_SOURCES})
 
-target_link_libraries (
-    ${PROJECT_NAME}
-    ${df-math_LIBRARY}
-    ${blconfig_LIBRARY}
-    ${MYSQL_LIBRARY}
+target_link_libraries (${PROJECT_NAME} PUBLIC
+    -Wl,--whole-archive
+    df-math
+    -Wl,--no-whole-archive
+    blconfig
     ${Boost_LIBRARIES}
 )
 

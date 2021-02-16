@@ -1,13 +1,8 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(mysql-utils-unit-tests)
 
 find_package (MySQL REQUIRED)
-
-include_directories(
-    ${mysql-wrapper_INCLUDE_DIRS}
-    ${GTEST_INCLUDE_DIR}
-)
 
 set(EXE_SOURCES
     insert-generator-tests.cpp
@@ -15,13 +10,11 @@ set(EXE_SOURCES
 
 add_executable(${PROJECT_NAME} ${EXE_SOURCES})
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME} PUBLIC
     gtest
     gtest_main
-    ${mysql-wrapper_LIBRARY}
-    ${MYSQL_LIBRARY}
+    mysql-wrapper
 )
 
 add_test(NAME MysqlUtilsTests
          COMMAND ${PROJECT_NAME})
-run_test(${PROJECT_NAME})

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(configuration-utils)
 
@@ -21,17 +21,7 @@ include_directories(
 
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCE})
 
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_rvalue_references)
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_lambdas)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 
-export_include_dirs(
-    ${PROJECT_SOURCE_DIR}
-    ${USED_INCDIRS}
-)
-
-export_libs(
-	${PROJECT_NAME}
-	${system-utils_LIBRARY}
-	${blconfig_LIBRARY}
-	${Boost_FILESYSTEM_LIBRARY}
-)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/..)
+target_link_libraries(${PROJECT_NAME} PUBLIC system-utils blconfig Boost::filesystem)

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(timestamp-utils)
 
@@ -13,12 +13,7 @@ include_directories(${libboltek_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCE})
 
-export_include_dirs(
-    ${PROJECT_SOURCE_DIR}
-    ${libboltek_INCLUDE_DIRS}
-)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 
-export_libs(
-	${PROJECT_NAME}
-	${Boost_DATE_TIME_LIBRARY}
-)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${Boost_LIBRARIES} boltek)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})

@@ -1,11 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(math-utils-unit-tests)
 
-include_directories (
-    ${math-utils_INCLUDE_DIRS}
-    ${GTEST_INCLUDE_DIR}
-)
+    #${GTEST_INCLUDE_DIR}
+
 
 set(EXE_SOURCES
     linear-algebra-test.cpp
@@ -15,12 +13,12 @@ set(EXE_SOURCES
 
 add_executable(${PROJECT_NAME} ${EXE_SOURCES})
 
-target_link_libraries (${PROJECT_NAME}
+target_link_libraries (${PROJECT_NAME} PUBLIC
     gtest
     gtest_main
-    ${math-utils_LIBRARY}
+    math-utils
 )
 
 add_test(NAME MathUtilsTests
          COMMAND ${PROJECT_NAME})
-run_test(${PROJECT_NAME})
+

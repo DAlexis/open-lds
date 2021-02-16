@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(mysql-wrapper)
 
@@ -6,32 +6,12 @@ find_package(MySQL REQUIRED)
 
 set(LIB_SOURCE
     MysqlWrapper.cpp
+    MysqlWrapper.hpp
 )
-
-set(${PROJECT_NAME}_USED_INCDIRS
-	${MYSQL_INCLUDE_DIRECTORIES}
-	${blconfig_INCLUDE_DIRS}
-)
-
-include_directories(
-    ${${PROJECT_NAME}_USED_INCDIRS}
-)
-
-
-include_directories()
 
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCE})
 
-# This enables C++11 compiler key. PUBLIC means enabling it for dependent projects too
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_rvalue_references)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${MYSQL_LIBRARY} blconfig)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR} ${MYSQL_INCLUDE_DIRECTORIES})
 
-export_include_dirs(
-    ${PROJECT_SOURCE_DIR}
-    ${${PROJECT_NAME}_USED_INCDIRS}
-)
-
-export_libs(
-	${PROJECT_NAME}
-	${MYSQL_LIBRARY}
-	${blconfig_LIBRARY}
-)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)

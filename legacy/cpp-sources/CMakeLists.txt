@@ -13,23 +13,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -g -DNDEBUG")
 execute_process(COMMAND git log -1 --format="%H" OUTPUT_VARIABLE git_commit)
 add_definitions( -DGIT_COMMIT_TAG=${git_commit} )
 
-add_definitions( -DBOOST_LOG_DYN_LINK )
-
-## This macro creates variable ${PROJECT_NAME}_INCLUDE_DIRS with list of 
-# include directories exported by project
-macro(export_include_dirs)
-    set(${PROJECT_NAME}_INCLUDE_DIRS
-        ${ARGV}
-        CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
-endmacro()
-
-# This macro creates variable ${PROJECT_NAME}_LIBRARY with list of libraries exported 
-# by project
-macro(export_libs)
-    set(${PROJECT_NAME}_LIBRARY
-        ${ARGV}
-        CACHE INTERNAL "${PROJECT_NAME}: used and exported libs" FORCE)
-endmacro()
+#add_definitions( -DBOOST_LOG_DYN_LINK )
 
 include(detect-gtest.cmake)
 
@@ -40,7 +24,7 @@ add_subdirectory(dfclient)
 add_subdirectory(mathtest)
 add_subdirectory(strikesprocd)
 add_subdirectory(strikesstatd)
-add_subdirectory(strikesproc)
+#add_subdirectory(strikesproc)
 
 if(GTEST_FOUND)
     # To enable ctest usage

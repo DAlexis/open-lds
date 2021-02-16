@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 project(math-utils)
 find_package (Threads)
@@ -13,14 +13,7 @@ set(LIB_SOURCE
 
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCE})
 
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_rvalue_references)
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_lambdas)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_THREAD_LIBS_INIT})
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
 
-export_include_dirs(
-    ${PROJECT_SOURCE_DIR}
-)
-
-export_libs(
-	${PROJECT_NAME}
-	${CMAKE_THREAD_LIBS_INIT}
-)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)

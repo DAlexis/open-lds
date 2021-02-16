@@ -8,6 +8,7 @@
 #include <thread>
 #include <memory>
 #include <functional>
+#include <string>
 
 class DeviceAndExperimentSpecifiedClass
 {

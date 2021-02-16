@@ -360,14 +360,15 @@ double StrikesGroupVariationalSolver::calculateFiniteRadiusTerms(const Position&
 
 bool StrikesGroupVariationalSolver::isOnADetectionBorder(const Position& location) const
 {
-    return (calculateFiniteRadiusTerms(location) < 1e-2);
+    //return (calculateFiniteRadiusTerms(location) < 1e-2);
+    return true;
 }
 
 double StrikesGroupVariationalSolver::calculateDetectionFunction(const Position& location) const
 {
-    return  Configuration::Instance().solving.timeOfArrivalWeight       * calculateTimeOfArrivalDetFunc(location)+
-            Configuration::Instance().solving.directionFindingWeight    * calculateDirectionFindingDetFunc(location)+
-            Configuration::Instance().solving.finiteRadiusTermWeight    * calculateFiniteRadiusTerms(location);
+    return  Configuration::Instance().solving.timeOfArrivalWeight       * calculateTimeOfArrivalDetFunc(location)
+            + Configuration::Instance().solving.directionFindingWeight    * calculateDirectionFindingDetFunc(location);
+            //+ Configuration::Instance().solving.finiteRadiusTermWeight    * calculateFiniteRadiusTerms(location);
 }
 
 double StrikesGroupVariationalSolver::calculateDetectionFunction(double latitude, double longitude) const
